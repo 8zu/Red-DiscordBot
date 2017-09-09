@@ -82,9 +82,6 @@ class General:
         """
         if user != None:
             msg = ""
-            if user.id == self.bot.user.id:
-                user = ctx.message.author
-                msg = "Nice try. You think this is funny? How about *this* instead:\n\n"
             char = "abcdefghijklmnopqrstuvwxyz"
             tran = "ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz"
             table = str.maketrans(char, tran)
@@ -93,7 +90,9 @@ class General:
             tran = "∀qƆpƎℲפHIſʞ˥WNOԀQᴚS┴∩ΛMX⅄Z"
             table = str.maketrans(char, tran)
             name = name.translate(table)
-            await self.bot.say(msg + "(╯°□°）╯︵ " + name[::-1])
+            if user.id == self.bot.user.id:
+                msg = "\n\n(x￣x )..."
+            await self.bot.say("(╯°□°）╯︵ " + name[::-1] + msg)
         else:
             await self.bot.say("*flips a coin and... " + choice(["HEADS!*", "TAILS!*"]))
 
