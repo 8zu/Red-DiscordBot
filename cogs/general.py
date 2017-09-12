@@ -97,6 +97,20 @@ class General:
             await self.bot.say("*flips a coin and... " + choice(["HEADS!*", "TAILS!*"]))
 
     @commands.command(pass_context=True)
+    async def fart(self, ctx, user: discord.Member = None):
+        """People can fart.
+
+        People also need fart.
+        """
+        if user != None:
+            await self.bot.say("ˋ( ° ▽、° ) ≡≡3" + user.display_name)
+        else:
+            user = ctx.message.author
+            msgs = ["Hahahahahahaha ˋ( ° ▽、° ) ≡≡3 " + user.display_name, "I wanna fart... ˋ( - △、- ) ≡≡3"]
+            msg = choice(msgs)
+            await self.bot.say(msg)
+
+    @commands.command(pass_context=True)
     async def rps(self, ctx, your_choice : RPSParser):
         """Play rock paper scissors"""
         author = ctx.message.author
