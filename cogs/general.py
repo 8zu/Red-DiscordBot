@@ -103,7 +103,7 @@ class General:
         People also need fart.
         """
         if user != None:
-            await self.bot.say("ˋ( ° ▽、° ) ≡≡3" + user.display_name)
+            await self.bot.say("ˋ( ° ▽、° ) ≡≡3 " + user.display_name)
         else:
             user = ctx.message.author
             msgs = ["Hahahahahahaha ˋ( ° ▽、° ) ≡≡3 " + user.display_name, "I wanna fart... ˋ( - △、- ) ≡≡3"]
