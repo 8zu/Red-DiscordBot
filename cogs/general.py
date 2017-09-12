@@ -76,20 +76,19 @@ class General:
             await self.bot.say("{} Maybe higher than 1? ;P".format(author.mention))
 
     @commands.command()
-    async def mlborder(self, event_code: int = 1):
+    async def mlborder(self, event_code: int= None):
         # Catch current ranking points. Need event code.
-        url = "http://mlborder.com/events/{}/".format(event_code)
-        print(url + '\n')
-        doc = pq(url)
-        body = doc('body')
-        print(body)
-        table = body('.table')
-        th = table('th')
-        td = table('td')
-        msg = ""
-        for index in range(len(th)):
-            msg += pq(th[index]).text() + " " + pq(td[index]).text() + "\n"
-        await self.bot.say(msg)
+        if event_code != None:
+            url = "http://mlborder.com/events/{}/".format(event_code)
+            print(url + '\n')
+            doc = pq(url)
+            body = doc('body')
+            div = pq(body('.tab-pane')[0])('div')
+            # TODO: Catch the attribute called "data-react-props".
+            print(div.html())
+            await self.bot.say("mlborder is in developing.")
+        else:
+            await self.bot.say("mlborder need an event code.")
 
     @commands.command(pass_context=True)
     async def flip(self, ctx, user : discord.Member=None):
