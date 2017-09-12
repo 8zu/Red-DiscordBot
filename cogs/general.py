@@ -5,6 +5,7 @@ from random import randint
 from random import choice
 from enum import Enum
 from urllib.parse import quote_plus
+from pyquery import PyQuery
 import datetime
 import time
 import aiohttp
@@ -73,6 +74,22 @@ class General:
             await self.bot.say("{} :game_die: {} :game_die:".format(author.mention, n))
         else:
             await self.bot.say("{} Maybe higher than 1? ;P".format(author.mention))
+
+    @commands.command(pass_context=True)
+    async def mlborder(self, event_code: int = 1):
+        """Catch current ranking points.
+
+        Need event code.
+        """
+        url = "http://mlborder.com/events/{}".format(event_code)
+        doc = PyQuery(url)
+        table = doc('.table')
+        th = table('th')
+        tr = table('tr')
+        msg = ""
+        for index in range(len(th)):
+            msg += PyQuery(th[index]).text() + " " + PyQuery(tr[index]).text() + "\n"
+        await self.bot.say(msg)
 
     @commands.command(pass_context=True)
     async def flip(self, ctx, user : discord.Member=None):
