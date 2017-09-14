@@ -10,6 +10,7 @@ import datetime
 import time
 import aiohttp
 import asyncio
+import json
 
 settings = {"POLL_DURATION" : 60}
 
@@ -78,15 +79,31 @@ class General:
     @commands.command()
     async def mlborder(self, event_code: int= None):
         # Catch current ranking points. Need event code.
-        if event_code != None:
+        if event_code is not None:
             url = "http://mlborder.com/events/{}/".format(event_code)
-            print(url + '\n')
-            doc = pq(url)
-            body = doc('body')
-            div = pq(body('.tab-pane')[0])('div')
-            # TODO: Catch the attribute called "data-react-props".
-            print(div.html())
-            await self.bot.say("mlborder is in developing.")
+            document = pq(url)
+            body = document('body')
+            border_div = pq(body('.tab-pane')[0])('div')
+            data_react_props = border_div.html()
+
+            original_data = data_react_props[data_react_props.index('{'):data_react_props.rindex('}') + 1]
+            prepare_json = original_data.replace('&quot;', '"')
+            json_data = json.loads(prepare_json)
+
+            url = json_data['url']
+            border_summary = json_data['border_summary']
+            time = border_summary['time']
+            borders = border_summary['borders']
+
+            msg = url + "\n" + time + "\n"
+            msg += "1位：\t" + str(borders["1"]) + "\n"
+            msg += "10位：\t" + str(borders["10"]) + "\n"
+            msg += "100位：\t" + str(borders["100"]) + "\n"
+            msg += "500位：\t" + str(borders["500"]) + "\n"
+            msg += "1200位：\t" + str(borders["1200"]) + "\n"
+            msg += "1300位：\t" + str(borders["1300"])
+
+            await self.bot.say(msg)
         else:
             await self.bot.say("mlborder need an event code.")
 
