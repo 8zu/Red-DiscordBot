@@ -83,6 +83,7 @@ class General:
         if event_code is not None:
             url = "http://mlborder.com/events/{}/".format(event_code)
             document = pq(url)
+            title = document('title').text()
             body = document('body')
             border_div = pq(body('.tab-pane')[0])('div')
             data_react_props = border_div.html()
@@ -91,12 +92,14 @@ class General:
             prepare_json = original_data.replace('&quot;', '"')
             json_data = json.loads(prepare_json)
 
-            url = json_data['url']
+            # url = json_data['url']
+            event_name = title[title.index('『') + 1:title.rindex('』')]
+            event_schedule_and_idol = document('.list-group-item').text()
             border_summary = json_data['border_summary']
-            time = border_summary['time']
+            time_stamp = border_summary['time']
             borders = border_summary['borders']
 
-            msg = '\n'.join([f'{url}\n{time}',
+            msg = '\n'.join([f'{event_name}\n{event_schedule_and_idol}\n\n{time_stamp}',
             f"1位：\t\t{borders['1']:,}",
             f"10位：\t\t{borders['10']:,}",
             f"100位：\t\t{borders['100']:,}",
