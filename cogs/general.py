@@ -11,6 +11,7 @@ import time
 import aiohttp
 import asyncio
 import json
+import textwrap
 
 settings = {"POLL_DURATION" : 60}
 
@@ -95,13 +96,13 @@ class General:
             time = border_summary['time']
             borders = border_summary['borders']
 
-            msg = url + "\n" + time + "\n"
-            msg += "1位：\t" + str(borders["1"]) + "\n"
-            msg += "10位：\t" + str(borders["10"]) + "\n"
-            msg += "100位：\t" + str(borders["100"]) + "\n"
-            msg += "500位：\t" + str(borders["500"]) + "\n"
-            msg += "1200位：\t" + str(borders["1200"]) + "\n"
-            msg += "1300位：\t" + str(borders["1300"])
+            msg = '\n'.join([f'{url}\n{time}',
+            f"1位：\t\t{borders['1']:,}",
+            f"10位：\t\t{borders['10']:,}",
+            f"100位：\t\t{borders['100']:,}",
+            f"500位：\t\t{borders['500']:,}",
+            f"1200位：\t\t{borders['1200']:,}",
+            f"1300位：\t\t{borders['1300']:,}"])
 
             await self.bot.say(msg)
         else:
