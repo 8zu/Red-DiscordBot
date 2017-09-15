@@ -206,6 +206,20 @@ class General:
         else:
             await self.bot.say("That doesn't look like a question.")
 
+    @commands.command(pass_context=True)
+    async def echo(self, ctx, times=1):
+        """Repeat the last post """
+        channel = ctx.message.channel
+        logs = self.bot.logs_from(channel, before=ctx.message, limit=5)
+        async for message in logs:
+            if not message.content.startswith(ctx.prefix) \
+                and message.author != self.bot.user:
+                    msg = message.content
+                    break
+        for _ in range(times):
+            await self.bot.say(msg)
+
+
     @commands.command(aliases=["sw"], pass_context=True)
     async def stopwatch(self, ctx):
         """Starts/stops stopwatch"""
