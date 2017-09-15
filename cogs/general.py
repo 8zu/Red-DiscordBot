@@ -207,17 +207,29 @@ class General:
             await self.bot.say("That doesn't look like a question.")
 
     @commands.command(pass_context=True)
-    async def echo(self, ctx, times=1):
+    async def echo(self, ctx, times: int=1):
         """Repeat the last post """
         channel = ctx.message.channel
+        # prevent spamming
+        if times > 10:
+            times = 10
         logs = self.bot.logs_from(channel, before=ctx.message, limit=5)
+        msg = None
         async for message in logs:
             if not message.content.startswith(ctx.prefix) \
                 and message.author != self.bot.user:
                     msg = message.content
                     break
-        for _ in range(times):
-            await self.bot.say(msg)
+
+        def change_subject(msg):
+            return msg.replace('我', '你')
+
+        if msg:
+            msg = change_subject(msg)
+            for _ in range(times):
+                await self.bot.say(msg)
+        else:
+            await self.bot.say("Nothing to echo ¯\\_(ツ)_/¯ Emmmm")
 
 
     @commands.command(aliases=["sw"], pass_context=True)
